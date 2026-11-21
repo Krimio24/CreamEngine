@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	
-	<meta title="CreamEngine" package="me.cream.funkin" version="1.0.0" company="Krimio24" />
+	<meta title="CreamEngine" package="me.cream.funkin" version="0.0.1" company="Krimio24" />
 
 	<app main="Main" path="export" file="Funkin" preloader="funkin.ui.transition.preload.FunkinPreloader" />
 	<architecture exclude="armv7" if="android" />
