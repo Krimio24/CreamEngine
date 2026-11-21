@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CreamEngine · Haptic Chart</title>
+<style>
+:root{color-scheme:dark;--bg:#101114;--panel:#191b20;--panel2:#20232a;--line:#30343e;--text:#f1f3f5;--muted:#9da4b0;--lime:#a4ff11;--cyan:#49d9d0;--pink:#ff5f91;--yellow:#ffd166}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -25%,#292d34 0,var(--bg) 58%);color:var(--text);font:14px/1.45 "Segoe UI",system-ui,sans-serif}button,input,select{font:inherit;color:inherit}button{border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:9px 13px;cursor:pointer}button:hover{border-color:#69717f;background:#292d35}button.primary{background:var(--lime);border-color:var(--lime);color:#11150b;font-weight:700}button.danger{color:#ff8cae}.app{max-width:1200px;margin:auto;padding:28px 22px 40px}.header{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:22px}.brand{display:flex;align-items:center;gap:13px}.mark{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:var(--lime);color:#111;font-size:22px;font-weight:900}.eyebrow{color:var(--lime);font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}.header h1{font-size:22px;margin:2px 0 0}.header p{color:var(--muted);margin:3px 0 0}.actions{display:flex;gap:8px;flex-wrap:wrap}.card{background:linear-gradient(145deg,#1b1d23,#17191e);border:1px solid var(--line);border-radius:14px;padding:17px;margin-bottom:14px;box-shadow:0 10px 32px #0002}.settings{display:grid;grid-template-columns:minmax(180px,1.5fr) repeat(4,minmax(105px,.7fr));gap:12px;align-items:end}.field label{display:block;color:var(--muted);font-size:12px;margin:0 0 6px}.field input,.field select{width:100%;background:#101216;border:1px solid var(--line);border-radius:8px;padding:9px 10px;outline:none}.field input:focus,.field select:focus{border-color:var(--lime)}.timeline-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.timeline-head h2{margin:0;font-size:15px}.hint{color:var(--muted);font-size:12px}.scroll{overflow:auto;border:1px solid var(--line);border-radius:10px;background:#101216;touch-action:pan-x pan-y}.canvas-wrap{position:relative;min-width:100%;width:max-content}canvas{display:block;cursor:crosshair}.timeline-foot{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-top:10px}.controls{display:grid;grid-template-columns:1fr 1fr 1fr auto auto;gap:12px;align-items:end}.range-line{display:flex;align-items:center;gap:9px}.range-line input{flex:1;accent-color:var(--lime)}.pill{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:5px 9px;color:var(--muted);font-size:12px}.dot{width:8px;height:8px;border-radius:99px}.events{display:flex;flex-direction:column;gap:7px;margin-top:12px}.event{display:grid;grid-template-columns:10px 1fr auto auto;align-items:center;gap:10px;background:#111317;border:1px solid var(--line);border-radius:9px;padding:9px 11px}.event.selected{border-color:var(--lime)}.event .meta{color:var(--muted);font-size:12px}.event button{padding:5px 9px}.empty{color:var(--muted);padding:16px;text-align:center;border:1px dashed var(--line);border-radius:9px}.footer{color:var(--muted);font-size:12px;margin-top:16px}.status{min-height:19px;color:var(--lime);font-size:12px;margin-left:auto}.hidden{display:none}@media(max-width:760px){.app{padding:18px 12px}.header{align-items:flex-start;flex-direction:column}.settings{grid-template-columns:1fr 1fr}.settings .field:first-child{grid-column:1/-1}.controls{grid-template-columns:1fr 1fr}.controls .field:first-child{grid-column:1/-1}.timeline-head{align-items:flex-start;flex-direction:column}.actions{width:100%}.actions button{flex:1}.event{grid-template-columns:10px 1fr auto}.event .meta:nth-last-of-type(2){display:none}}
+ .playhead{position:absolute;top:34px;bottom:15px;left:42px;width:2px;background:var(--yellow);box-shadow:0 0 8px #ffd166aa;pointer-events:none;z-index:2}.media-tools{display:grid;grid-template-columns:auto minmax(120px,1fr) auto;align-items:center;gap:12px}.media-tools input[type=range]{width:100%;accent-color:var(--lime)}.media-name{color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}@media(max-width:760px){.media-tools{grid-template-columns:1fr auto}.media-tools input[type=range]{grid-column:1/-1;grid-row:2}.media-tools .media-name{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<main class="app">
+  <header class="header">
+    <div class="brand"><div class="mark">〰</div><div><div class="eyebrow">CreamEngine · Tool</div><h1>Haptic Chart Editor</h1><p>Crea patrones de vibración y expórtalos a JSON.</p></div></div>
+    <div class="actions"><button id="mediaBtn">Cargar audio/video</button><button id="importBtn">Importar JSON</button><button id="previewBtn">▶ Probar</button><button class="primary" id="exportBtn">Descargar JSON</button><input id="fileInput" class="hidden" type="file" accept=".json,application/json"><input id="mediaInput" class="hidden" type="file" accept="audio/*,video/*"></div>
+  </header>
+  <section class="card settings">
+    <div class="field"><label>Nombre del chart</label><input id="songName" value="Mi chart" maxlength="80"></div>
+    <div class="field"><label>BPM</label><input id="bpm" type="number" min="1" max="400" value="120"></div>
+    <div class="field"><label>Compases</label><input id="bars" type="number" min="1" max="64" value="4"></div>
+    <div class="field"><label>Subdivisión</label><select id="subdivision"><option value="1">Beat</option><option value="2">1/2 beat</option><option value="4" selected>1/4 beat</option><option value="8">1/8 beat</option></select></div>
+    <div class="field"><label>Compás</label><select id="beatsPerBar"><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div>
+  </section>
+  <section class="card media-tools"><button id="mediaPlayBtn">▶ Reproducir audio</button><input id="mediaSeek" type="range" min="0" max="1000" value="0" disabled aria-label="Posición del audio"><div id="mediaName" class="media-name">Sin audio cargado</div><button id="addNowBtn" title="Añadir un pulso en el tiempo actual">＋ Añadir ahora</button></section>
+  <section class="card">
+    <div class="timeline-head"><h2>Timeline</h2><div class="hint">Clic: colocar · Espacio: pulso · ↑/↓: intensidad · mantener ←/→: duración · arrastra: mover · doble clic: borrar</div></div>
+    <div class="scroll" id="scroll"><div class="canvas-wrap"><canvas id="timeline" height="250"></canvas><div id="playhead" class="playhead"></div></div></div>
+    <div class="timeline-foot"><span><i class="pill"><i class="dot" style="background:var(--cyan)"></i>Motor izquierdo</i> <i class="pill"><i class="dot" style="background:var(--pink)"></i>Motor derecho</i></span><span id="durationLabel"></span></div>
+  </section>
+  <section class="card controls">
+    <div class="field"><label>Destino al crear</label><select id="motor"><option value="both">Ambos motores</option><option value="left">Motor izquierdo</option><option value="right">Motor derecho</option></select></div>
+    <div class="field"><label>Duración del pulso · ms</label><input id="pulseDuration" type="number" min="10" max="5000" step="10" value="120"></div>
+    <div class="field"><label>Intensidad · <span id="intensityLabel">70%</span></label><div class="range-line"><input id="intensity" type="range" min="0" max="100" value="70"></div></div>
+    <button id="deleteBtn" class="danger">Eliminar seleccionado</button><button id="clearBtn">Limpiar chart</button>
+  </section>
+  <section class="card"><div class="timeline-head"><h2>Pulsos</h2><span id="eventCount" class="hint"></span></div><div id="events" class="events"></div><div class="footer">El HTML funciona localmente y no necesita instalar nada. La prueba de vibración requiere un gamepad conectado y un navegador compatible; la vibración del juego se reproduce con HapticUtil.</div></section>
+  <div class="status" id="status" role="status"></div>
+</main>
+<script>
+(() => {
+  const $ = id => document.getElementById(id), canvas = $('timeline'), ctx = canvas.getContext('2d');
+  const C = {bg:'#101216', line:'#30343e', muted:'#9da4b0', text:'#f1f3f5', lime:'#a4ff11', cyan:'#49d9d0', pink:'#ff5f91', yellow:'#ffd166'};
+  let events = [], selected = -1, dragIndex = -1, previewTimers = [], playing = false;
+  let media = null, mediaUrl = null, cursorMs = 0, durationHold = null, holdFrame = 0;
+  const pxBeat = 92, laneY = {left:105, right:185};
+  function config(){return {bpm:Math.max(1,+$('bpm').value||120),bars:Math.max(1,+$('bars').value||4),sub:+$('subdivision').value||4,beats:+$('beatsPerBar').value||4};}
+  function msBeat(){return 60000/config().bpm;}
+  function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+  function sortEvents(){events.sort((a,b)=>a.atMs-b.atMs); if(selected>=events.length)selected=events.length-1;}
+  function draw(refreshList=true){
+    const c=config(), width=Math.max(640,c.bars*c.beats*pxBeat+48); canvas.width=width; canvas.height=250; ctx.clearRect(0,0,width,250);ctx.fillStyle=C.bg;ctx.fillRect(0,0,width,250);
+    const x0=42, total=c.bars*c.beats, step=pxBeat/c.sub;
+    for(let beat=0;beat<=total;beat++){
+      const x=x0+beat*pxBeat, bar=beat%c.beats===0;
+      ctx.strokeStyle=bar?'#505662':C.line;ctx.lineWidth=bar?1.4:1;ctx.beginPath();ctx.moveTo(x,34);ctx.lineTo(x,235);ctx.stroke();
+      if(bar&&beat<total){ctx.fillStyle=C.muted;ctx.font='11px Segoe UI';ctx.fillText('COMPÁS '+(Math.floor(beat/c.beats)+1),x+6,18);}
+      for(let s=1;s<c.sub&&beat<total;s++){const sx=x+s*step;ctx.strokeStyle='#252831';ctx.beginPath();ctx.moveTo(sx,52);ctx.lineTo(sx,235);ctx.stroke();}
+    }
+    ctx.fillStyle=C.cyan;ctx.font='600 12px Segoe UI';ctx.fillText('IZQUIERDO',10,96);
+    ctx.fillStyle=C.pink;ctx.fillText('DERECHO',10,176);
+    for(const y of [laneY.left,laneY.right]){ctx.strokeStyle='#252831';ctx.beginPath();ctx.moveTo(x0,y+17);ctx.lineTo(width-10,y+17);ctx.stroke();}
+    events.forEach((e,i)=>{
+      const x=x0+(e.atMs/msBeat())*pxBeat, w=Math.max(10,(e.durationMs/msBeat())*pxBeat), amp=Math.max(e.left,e.right);
+      for(const [motor,y,col,val] of [['left',laneY.left,C.cyan,e.left],['right',laneY.right,C.pink,e.right]]) if(val>0){
+        ctx.globalAlpha=.35+.65*val;ctx.fillStyle=col;ctx.beginPath();ctx.roundRect(x,y,w,25,6);ctx.fill();ctx.globalAlpha=1;
+        ctx.fillStyle='#111317';ctx.font='700 10px Segoe UI';ctx.fillText(Math.round(val*100)+'%',x+5,y+16);
+      }
+      if(i===selected){ctx.strokeStyle=C.lime;ctx.lineWidth=2;ctx.strokeRect(x-2,laneY.left-3,Math.max(w+4,12),108);ctx.lineWidth=1;}
+    });
+    const duration=total*msBeat(); $('durationLabel').textContent=`${(duration/1000).toFixed(2)} s · ${total} beats`;
+    if(refreshList)updateList(); updatePlayhead();
+  }
+  function updateList(){
+    $('eventCount').textContent=`${events.length} ${events.length===1?'pulso':'pulsos'}`;
+    const list=$('events');list.innerHTML='';
+    if(!events.length){list.innerHTML='<div class="empty">Todavía no hay pulsos. Haz clic en el timeline para añadir uno.</div>';return;}
+    events.forEach((e,i)=>{const row=document.createElement('div');row.className='event'+(i===selected?' selected':'');
+      const dot=document.createElement('i');dot.className='dot';dot.style.background=e.left&&e.right?C.lime:e.left?C.cyan:C.pink;
+      const main=document.createElement('div');main.innerHTML=`<strong>Pulso ${i+1}</strong><div class="meta">${(e.atMs/1000).toFixed(3)} s · ${e.durationMs} ms</div>`;
+      const amp=document.createElement('span');amp.className='meta';amp.textContent=`L ${Math.round(e.left*100)}% · R ${Math.round(e.right*100)}%`;
+      const del=document.createElement('button');del.className='danger';del.textContent='×';del.title='Eliminar pulso';del.onclick=()=>removeEvent(i);
+      row.onclick=()=>{selected=i;cursorMs=e.atMs;draw();};row.append(dot,main,amp,del);list.append(row);
+    });
+  }
+  function addAt(ms,lane){const motor=$('motor').value, amp=(+$('intensity').value)/100, duration=clamp(+$('pulseDuration').value||120,10,5000);let left=0,right=0;
+    if(motor==='left'||(motor==='both'&&lane==='left'))left=amp;if(motor==='right'||(motor==='both'&&lane==='right'))right=amp;if(motor==='both'){left=right=amp;}
+    cursorMs=Math.max(0,Math.round(ms));events.push({atMs:cursorMs,durationMs:duration,left,right});sortEvents();selected=events.findIndex(e=>e.atMs===cursorMs);draw();}
+  function removeEvent(i){events.splice(i,1);selected=-1;draw();}
+  function pointerData(ev){const r=canvas.getBoundingClientRect(),scale=canvas.width/r.width;return {x:(ev.clientX-r.left)*scale,y:(ev.clientY-r.top)*scale};}
+  function hitEvent(x,y){const c=config(),x0=42;for(let i=events.length-1;i>=0;i--){const e=events[i],ex=x0+(e.atMs/msBeat())*pxBeat,w=Math.max(10,(e.durationMs/msBeat())*pxBeat);if(x>=ex-4&&x<=ex+w+4&&y>=laneY.left-5&&y<=laneY.right+30)return i;}return -1;}
+  canvas.addEventListener('pointerdown',ev=>{const p=pointerData(ev),hit=hitEvent(p.x,p.y);if(hit>=0){selected=hit;cursorMs=events[hit].atMs;dragIndex=hit;canvas.setPointerCapture(ev.pointerId);draw();}else{const c=config(),x0=42,beat=Math.max(0,(p.x-x0)/pxBeat),tick=1/c.sub,snapped=Math.round(beat/tick)*tick,lane=p.y<(laneY.left+laneY.right)/2?'left':'right';addAt(snapped*msBeat(),lane);}});
+  canvas.addEventListener('pointermove',ev=>{if(dragIndex<0)return;const p=pointerData(ev),c=config(),tick=1/c.sub,beat=Math.max(0,(p.x-42)/pxBeat);events[dragIndex].atMs=Math.round(Math.round(beat/tick)*tick*msBeat());cursorMs=events[dragIndex].atMs;sortEvents();selected=dragIndex;draw();});
+  canvas.addEventListener('pointerup',()=>dragIndex=-1);canvas.addEventListener('pointercancel',()=>dragIndex=-1);
+  canvas.addEventListener('dblclick',ev=>{const p=pointerData(ev),hit=hitEvent(p.x,p.y);if(hit>=0)removeEvent(hit);});
+  function chart(){return {version:1,name:$('songName').value||'Haptic Chart',bpm:config().bpm,beatsPerBar:config().beats,events:events.map(e=>({atMs:Math.round(e.atMs),durationMs:Math.round(e.durationMs),left:+e.left.toFixed(3),right:+e.right.toFixed(3)}))};}
+  function download(){const blob=new Blob([JSON.stringify(chart(),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=($('songName').value||'haptic-chart').toLowerCase().replace(/[^a-z0-9-_]+/g,'-')+'-haptics.json';a.click();URL.revokeObjectURL(url);say('Chart JSON descargado.');}
+  function say(msg){$('status').textContent=msg;setTimeout(()=>{if($('status').textContent===msg)$('status').textContent='';},2600);}
+  function updatePlayhead(){const line=$('playhead');line.style.display='block';line.style.left=(42+(cursorMs/msBeat())*pxBeat)+'px';}
+  function stopPreview(){for(const t of previewTimers)clearTimeout(t);previewTimers=[];playing=false;$('previewBtn').textContent='▶ Probar';if(media&&!media.paused)media.pause();$('mediaPlayBtn').textContent='▶ Reproducir audio';}
+  async function rumble(left,right,duration){const pads=navigator.getGamepads?.()||[];const pad=[...pads].find(p=>p&&p.connected&&p.vibrationActuator);if(!pad){say('Conecta un gamepad con vibración para probar el chart.');return;}
+    try{await pad.vibrationActuator.playEffect('dual-rumble',{startDelay:0,duration, weakMagnitude:right,strongMagnitude:left});}catch(e){say('Este navegador no permite probar vibración; el JSON sí se puede exportar.');}}
+  function preview(){if(playing){stopPreview();return;}if(!events.length&&!media){say('Carga audio o añade al menos un pulso.');return;}playing=true;$('previewBtn').textContent='■ Detener';const from=media?(media.paused?cursorMs:media.currentTime*1000):0;if(media&&media.paused){media.currentTime=clamp(from/1000,0,Number.isFinite(media.duration)?media.duration:from/1000);media.play().catch(()=>say('El navegador no pudo reproducir este archivo.'));}events.filter(e=>e.atMs>=from).forEach(e=>previewTimers.push(setTimeout(()=>rumble(e.left,e.right,e.durationMs),e.atMs-from)));const chartEnd=events.length?Math.max(...events.map(e=>e.atMs+e.durationMs))-from:0,songEnd=media&&Number.isFinite(media.duration)?media.duration*1000-from:0;previewTimers.push(setTimeout(stopPreview,Math.max(100,chartEnd,songEnd)+100));}
+  function loadMedia(file){stopPreview();if(media){media.pause();media.remove();}if(mediaUrl)URL.revokeObjectURL(mediaUrl);const isVideo=file.type.startsWith('video/')||/\.(mp4|webm|mov|m4v|ogv)$/i.test(file.name);media=document.createElement(isVideo?'video':'audio');media.hidden=true;media.preload='metadata';media.playsInline=true;mediaUrl=URL.createObjectURL(file);media.src=mediaUrl;document.body.append(media);$('mediaName').textContent=file.name+(isVideo?' · video, solo audio':' · audio');$('mediaSeek').disabled=true;
+    media.onloadedmetadata=()=>{if(!Number.isFinite(media.duration)||media.duration<=0){say('No se pudo leer la duración del archivo.');return;}$('mediaSeek').disabled=false;$('mediaSeek').value=0;cursorMs=0;const c=config(),bars=Math.max(1,Math.min(64,Math.ceil(media.duration*1000/(msBeat()*c.beats))));$('bars').value=bars;$('mediaName').textContent=file.name+(isVideo?' · video, solo audio':' · audio')+` · ${formatTime(media.duration)}`;$('mediaPlayBtn').textContent='▶ Reproducir audio';draw();say('Audio cargado. El video queda oculto y solo se escucha su pista de audio.');};
+    media.ontimeupdate=()=>{cursorMs=media.currentTime*1000;if(media.duration>0&&document.activeElement!==$('mediaSeek'))$('mediaSeek').value=Math.round(media.currentTime/media.duration*1000);updatePlayhead();};media.onended=()=>{if(playing)stopPreview();$('mediaPlayBtn').textContent='▶ Reproducir audio';};media.onerror=()=>say('No se pudo abrir el audio de este archivo en el navegador.');updatePlayhead();}
+  function formatTime(seconds){const m=Math.floor(seconds/60),s=Math.floor(seconds%60);return `${m}:${String(s).padStart(2,'0')}`;}
+  $('mediaBtn').onclick=()=>$('mediaInput').click();$('mediaInput').onchange=ev=>{const file=ev.target.files[0];if(file)loadMedia(file);ev.target.value='';};
+  $('mediaPlayBtn').onclick=()=>{if(!media){say('Carga primero un archivo de audio o video.');return;}if(media.paused){media.play().then(()=>$('mediaPlayBtn').textContent='Ⅱ Pausar audio').catch(()=>say('El navegador no pudo reproducir este archivo.'));}else{if(playing)stopPreview();else media.pause();$('mediaPlayBtn').textContent='▶ Reproducir audio';}};
+  $('mediaSeek').oninput=()=>{if(media&&Number.isFinite(media.duration)){if(playing)stopPreview();media.currentTime=(+$('mediaSeek').value/1000)*media.duration;cursorMs=media.currentTime*1000;updatePlayhead();}};
+  $('addNowBtn').onclick=()=>addAt(media?media.currentTime*1000:0,'left');
+  function setSelectedIntensity(delta){if(selected<0||!events[selected]){say('Selecciona un pulso o crea uno con Espacio.');return;}const e=events[selected],current=Math.max(e.left,e.right),next=clamp(Math.round((current+delta)*100)/100,0,1);if(e.left>0)e.left=next;if(e.right>0)e.right=next;if(e.left===0&&e.right===0){if($('motor').value==='right')e.right=next;else if($('motor').value==='left')e.left=next;else e.left=e.right=next;}$('intensity').value=Math.round(next*100);$('intensityLabel').textContent=Math.round(next*100)+'%';draw();}
+  function animateDurationHold(){if(!durationHold)return;const e=events[durationHold.index];if(!e){durationHold=null;return;}e.durationMs=clamp(durationHold.base+durationHold.direction*(performance.now()-durationHold.start),10,5000);draw(false);holdFrame=requestAnimationFrame(animateDurationHold);}
+  window.addEventListener('keydown',ev=>{if(ev.altKey||ev.ctrlKey||ev.metaKey)return;const tag=ev.target?.tagName?.toLowerCase();if(['input','select','textarea','button'].includes(tag)||ev.target?.isContentEditable)return;
+    if(ev.code==='Space'){ev.preventDefault();if(ev.repeat)return;const at=media&&!media.paused?media.currentTime*1000:cursorMs,lane=$('motor').value==='right'?'right':'left';addAt(at,lane);if(!media||media.paused)cursorMs=at+msBeat()/config().sub;updatePlayhead();}
+    else if(ev.code==='ArrowUp'||ev.code==='ArrowDown'){ev.preventDefault();setSelectedIntensity(ev.code==='ArrowUp'?0.05:-0.05);}
+    else if((ev.code==='ArrowRight'||ev.code==='ArrowLeft')&&!ev.repeat){ev.preventDefault();if(selected<0||!events[selected]){say('Selecciona o coloca un pulso antes de ajustar su duración.');return;}durationHold={index:selected,direction:ev.code==='ArrowRight'?1:-1,start:performance.now(),base:events[selected].durationMs};holdFrame=requestAnimationFrame(animateDurationHold);}
+  });
+  window.addEventListener('keyup',ev=>{if(durationHold&&((ev.code==='ArrowRight'&&durationHold.direction>0)||(ev.code==='ArrowLeft'&&durationHold.direction<0))){cancelAnimationFrame(holdFrame);const e=events[durationHold.index];if(e)e.durationMs=clamp(durationHold.base+durationHold.direction*(performance.now()-durationHold.start),10,5000);durationHold=null;draw();}});
+  $('intensity').oninput=()=>{$('intensityLabel').textContent=$('intensity').value+'%';};
+  $('exportBtn').onclick=download;$('previewBtn').onclick=preview;$('deleteBtn').onclick=()=>selected>=0?removeEvent(selected):say('Selecciona un pulso primero.');$('clearBtn').onclick=()=>{events=[];selected=-1;draw();};
+  $('importBtn').onclick=()=>$('fileInput').click();$('fileInput').onchange=async ev=>{const file=ev.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());if(!Array.isArray(data.events))throw Error('No existe el arreglo events');events=data.events.map(e=>({atMs:+(e.atMs??e.time??0),durationMs:+(e.durationMs??e.duration??100),left:+(e.left??1),right:+(e.right??e.left??1)})).filter(e=>Number.isFinite(e.atMs)&&e.atMs>=0&&Number.isFinite(e.durationMs)&&e.durationMs>0);$('songName').value=data.name||data.songName||file.name.replace(/\.json$/i,'');if(data.bpm)$('bpm').value=data.bpm;sortEvents();selected=-1;draw();say('Chart importado.');}catch(err){say('No se pudo importar: '+err.message);}ev.target.value='';};
+  for(const id of ['bpm','bars','subdivision','beatsPerBar'])$(id).addEventListener('input',draw);
+  draw();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1112 @@
+{
+  "version": 1,
+  "name": "Mobile Build",
+  "bpm": 196,
+  "beatsPerBar": 4,
+  "events": [
+    {
+      "atMs": 4821,
+      "durationMs": 100,
+      "left": 0.1,
+      "right": 0.1
+    },
+    {
+      "atMs": 5051,
+      "durationMs": 100,
+      "left": 0.1,
+      "right": 0.1
+    },
+    {
+      "atMs": 5230,
+      "durationMs": 100,
+      "left": 0.1,
+      "right": 0.1
+    },
+    {
+      "atMs": 5496,
+      "durationMs": 100,
+      "left": 0.1,
+      "right": 0.1
+    },
+    {
+      "atMs": 5714,
+      "durationMs": 100,
+      "left": 0.1,
+      "right": 0.1
+    },
+    {
+      "atMs": 5906,
+      "durationMs": 100,
+      "left": 0.1,
+      "right": 0.1
+    },
+    {
+      "atMs": 6163,
+      "durationMs": 100,
+      "left": 0.1,
+      "right": 0.1
+    },
+    {
+      "atMs": 6455,
+      "durationMs": 100,
+      "left": 0.1,
+      "right": 0.1
+    },
+    {
+      "atMs": 6676,
+      "durationMs": 100,
+      "left": 0.1,
+      "right": 0.1
+    },
+    {
+      "atMs": 6918,
+      "durationMs": 100,
+      "left": 0.1,
+      "right": 0.1
+    },
+    {
+      "atMs": 8950,
+      "durationMs": 200,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 14241,
+      "durationMs": 300,
+      "left": 0.2,
+      "right": 0.2
+    },
+    {
+      "atMs": 14470,
+      "durationMs": 300,
+      "left": 0.2,
+      "right": 0.2
+    },
+    {
+      "atMs": 14666,
+      "durationMs": 300,
+      "left": 0.2,
+      "right": 0.2
+    },
+    {
+      "atMs": 14883,
+      "durationMs": 300,
+      "left": 0.2,
+      "right": 0.2
+    },
+    {
+      "atMs": 15106,
+      "durationMs": 300,
+      "left": 0.2,
+      "right": 0.2
+    },
+    {
+      "atMs": 18885,
+      "durationMs": 500,
+      "left": 0.05,
+      "right": 0.05
+    },
+    {
+      "atMs": 19362,
+      "durationMs": 500,
+      "left": 0.05,
+      "right": 0.05
+    },
+    {
+      "atMs": 19821,
+      "durationMs": 500,
+      "left": 0.05,
+      "right": 0.05
+    },
+    {
+      "atMs": 21888,
+      "durationMs": 100,
+      "left": 0.05,
+      "right": 0.05
+    },
+    {
+      "atMs": 50886,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 51204,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 51525,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 51780,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 51944,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 52052,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 52467,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 52768,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 53089,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 53386,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 53684,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 53989,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 54269,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 54409,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 54532,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 54859,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 55165,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 55452,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 55604,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 55749,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 55826,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 56160,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 56441,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 56685,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 56803,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 56900,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 57349,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 57653,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 57969,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 58271,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 58385,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 58533,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 58655,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 58939,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 59180,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 59306,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 59686,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 60131,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 60413,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 60558,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 60701,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 60997,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 61322,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 61588,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 61714,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 61789,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 62215,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 62538,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 62849,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 62989,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 63113,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 63222,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 63327,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 63829,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 64075,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 64213,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 64577,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 64710,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 64977,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 65315,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 65469,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 65620,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 65921,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 66239,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 66513,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 66670,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 66936,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 67101,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 67405,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 67715,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 68061,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 68556,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 68985,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 69670,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 70062,
+      "durationMs": 100,
+      "left": 0.52,
+      "right": 0.52
+    },
+    {
+      "atMs": 72687,
+      "durationMs": 100,
+      "left": 0.41,
+      "right": 0.41
+    },
+    {
+      "atMs": 73259,
+      "durationMs": 100,
+      "left": 0.41,
+      "right": 0.41
+    },
+    {
+      "atMs": 73704,
+      "durationMs": 100,
+      "left": 0.41,
+      "right": 0.41
+    },
+    {
+      "atMs": 75561,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 75956,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 77822,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 78105,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 78394,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 78619,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 78825,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 79024,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 79339,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 79628,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 79867,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 80079,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 80294,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 80603,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 80879,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 81117,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 81345,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 81552,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 81837,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 82145,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 82441,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 82702,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 82892,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 83143,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 83408,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 83624,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 83803,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 84002,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 84295,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 84564,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 84807,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 85020,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 85212,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 85503,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 85800,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 86028,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 86232,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 86431,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 86724,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 87052,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 87367,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 87679,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 87982,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 88257,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 88492,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 88719,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 88916,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 89184,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 89484,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 89715,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 89948,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 90137,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 90384,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 90673,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 90919,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 91127,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 91333,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 91628,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 91910,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 92156,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 92377,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 92583,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 92864,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 93156,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 93388,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 93606,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 93792,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 94069,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 94334,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 94568,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 94838,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 95026,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 95393,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 95652,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 95900,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 96113,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 96300,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 96570,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 96828,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 97055,
+      "durationMs": 100,
+      "left": 0.3,
+      "right": 0.3
+    },
+    {
+      "atMs": 101932,
+      "durationMs": 100,
+      "left": 1,
+      "right": 1
+    },
+    {
+      "atMs": 102160,
+      "durationMs": 100,
+      "left": 1,
+      "right": 1
+    },
+    {
+      "atMs": 102375,
+      "durationMs": 100,
+      "left": 1,
+      "right": 1
+    },
+    {
+      "atMs": 102572,
+      "durationMs": 100,
+      "left": 1,
+      "right": 1
+    },
+    {
+      "atMs": 102754,
+      "durationMs": 100,
+      "left": 1,
+      "right": 1
+    },
+    {
+      "atMs": 102795,
+      "durationMs": 100,
+      "left": 1,
+      "right": 1
+    }
+  ]
+}

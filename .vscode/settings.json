@@ -1,0 +1,8 @@
+{
+    "haxe.configurations": [
+        ["vscode-project.hxml"]
+    ],
+    "haxe.displayConfigurations": [
+        ["vscode-project.hxml"]
+    ]
+}

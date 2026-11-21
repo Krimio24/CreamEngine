@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "name": "RiftColab",
+  "bpm": 196,
+  "beatsPerBar": 4,
+  "events": [
+    {
+      "atMs": 5441,
+      "durationMs": 200,
+      "left": 0.1,
+      "right": 0.1
+    },
+    {
+      "atMs": 6265,
+      "durationMs": 100,
+      "left": 0.4,
+      "right": 0.4
+    },
+    {
+      "atMs": 6753,
+      "durationMs": 100,
+      "left": 0.4,
+      "right": 0.4
+    },
+    {
+      "atMs": 7115,
+      "durationMs": 100,
+      "left": 0.4,
+      "right": 0.4
+    },
+    {
+      "atMs": 7811,
+      "durationMs": 100,
+      "left": 0.4,
+      "right": 0.4
+    },
+    {
+      "atMs": 8447,
+      "durationMs": 100,
+      "left": 0.4,
+      "right": 0.4
+    },
+    {
+      "atMs": 10861,
+      "durationMs": 100,
+      "left": 0.05,
+      "right": 0.05
+    },
+    {
+      "atMs": 11147,
+      "durationMs": 100,
+      "left": 0.05,
+      "right": 0.05
+    },
+    {
+      "atMs": 11452,
+      "durationMs": 100,
+      "left": 0.05,
+      "right": 0.05
+    },
+    {
+      "atMs": 15810,
+      "durationMs": 100,
+      "left": 0.53,
+      "right": 0.53
+    },
+    {
+      "atMs": 20514,
+      "durationMs": 100,
+      "left": 0.51,
+      "right": 0.51
+    }
+  ]
+}
