@@ -1,42 +1,42 @@
 # CreamEngine
 
-**CreamEngine** es un proyecto de motor/engine de juego de ritmo desarrollado en **Haxe**, construido sobre **HaxeFlixel**, **OpenFL** y **Lime**. Su objetivo es ofrecer una base propia para crear y ejecutar un juego al estilo *Friday Night Funkin'*, con sistemas de gameplay, carga de canciones, personajes, escenarios, mods y vibración háptica.
+**CreamEngine** is a rhythm game engine project developed in **Haxe**, built on top of **HaxeFlixel**, **OpenFL**, and **Lime**. Its goal is to provide a custom foundation for creating and running a *Friday Night Funkin'*-style game, with gameplay systems, song loading, characters, stages, mod support, and haptic feedback.
 
-> **Estado:** en desarrollo. La estructura y varios sistemas ya están implementados, pero el gameplay y algunas herramientas todavía están en construcción. No se considera una versión estable.
+> **Status:** In development. The project structure and several systems are already implemented, but gameplay and some tools are still being worked on. CreamEngine is not considered a stable release.
 
-## Características
+## Features
 
-- **Gameplay rítmico:** base de juego con notas, strumlines, personajes, puntuación, misses y salud.
-- **Sistema de canciones:** carga charts y metadatos JSON, dificultades y velocidad de scroll.
-- **Conductor musical:** seguimiento de la posición de la canción, beats, steps, measures y cambios de BPM; admite cambios inmediatos y transiciones de tempo.
-- **Personajes y escenarios:** carga de datos JSON, animaciones, offsets, posiciones y propiedades de escenario.
-- **Soporte inicial para mods:** detección de carpetas de mods con `mod.json` y resolución de assets sobrescritos.
-- **Hápticos:** reproducción de vibración en dispositivos móviles y mandos compatibles, además de charts hápticos en JSON.
-- **Haptic Chart Editor:** herramienta HTML local para crear, editar, previsualizar e importar/exportar patrones de vibración.
-- **Objetivos multiplataforma:** configuración de proyecto para escritorio y Android; algunas funciones dependen de la plataforma y de sus extensiones.
+- **Rhythm gameplay:** A gameplay foundation with notes, strumlines, characters, scoring, misses, and health.
+- **Song system:** Loads JSON charts and metadata, difficulties, and scroll speed.
+- **Music conductor:** Tracks song position, beats, steps, measures, and BPM changes; supports immediate changes and tempo transitions.
+- **Characters and stages:** Loads JSON data for animations, offsets, positions, and stage properties.
+- **Initial mod support:** Detects mod folders containing `mod.json` and resolves overridden assets.
+- **Haptics:** Vibration support for mobile devices and compatible controllers, including JSON-based haptic charts.
+- **Haptic Chart Editor:** A local HTML tool for creating, editing, previewing, importing, and exporting vibration patterns.
+- **Cross-platform targets:** Project configuration for desktop and Android; some features depend on the target platform and its extensions.
 
-## Tecnologías
+## Technologies
 
-| Tecnología | Uso |
+| Technology | Purpose |
 | --- | --- |
-| Haxe | Lenguaje principal |
-| HaxeFlixel | Framework de juego |
-| OpenFL | Capa multimedia y de aplicación |
-| Lime | Compilación y targets |
-| FlxAnimate | Animaciones |
-| extension-haptics | Vibración en Android/iOS |
-| openfl-ffmpeg | Decodificación de vídeo en Android |
+| Haxe | Main programming language |
+| HaxeFlixel | Game framework |
+| OpenFL | Multimedia and application layer |
+| Lime | Build system and platform targets |
+| FlxAnimate | Animation support |
+| extension-haptics | Android/iOS vibration |
+| openfl-ffmpeg | Video decoding on Android |
 
-## Requisitos
+## Requirements
 
-Para compilar el proyecto necesitas:
+To build the project, you need:
 
 - [Haxe](https://haxe.org/)
 - [HaxeFlixel](https://haxeflixel.com/)
 - [Lime](https://lime.openfl.org/)
-- Android Studio y Android SDK/NDK si vas a compilar para Android.
+- Android Studio and the Android SDK/NDK if you plan to build for Android.
 
-Instala las dependencias Haxe utilizadas por el proyecto:
+Install the Haxe libraries used by the project:
 
 ```bash
 haxelib install lime
@@ -48,44 +48,44 @@ haxelib install openfl-ffmpeg
 haxelib install extension-haptics
 ```
 
-Las dos últimas dependencias se usan en el target Android/móvil según las condiciones de `project.xml`. Después, configura Lime:
+The last two dependencies are used by the Android/mobile target, depending on the conditions in `project.xml`. Then, configure Lime:
 
 ```bash
 haxelib run lime setup
 ```
 
-## Obtener el código
+## Getting the source
 
 ```bash
 git clone https://github.com/Krimio24/CreamEngine.git
 cd CreamEngine
 ```
 
-## Compilar y ejecutar
+## Building and running
 
-La configuración del proyecto está en `project.xml`. El tamaño inicial de la ventana es **1280 × 720**.
+The project configuration is located in `project.xml`. The initial window size is **1280 × 720**.
 
-Para probar en Windows:
+To run the project on Windows:
 
 ```bash
 lime test windows
 ```
 
-Para compilar Android en modo debug:
+To build Android in debug mode:
 
 ```bash
 lime build android -debug
 ```
 
-Para una compilación Android release:
+To create an Android release build:
 
 ```bash
 lime build android -release
 ```
 
-También se incluyen los scripts `build-android-debug.bat` y `build-android.bat` para Windows. Estos esperan una instalación local de Android Studio, Java y Android NDK; revisa las rutas configuradas en los scripts y tu entorno antes de ejecutarlos.
+The repository also includes `build-android-debug.bat` and `build-android.bat` scripts for Windows. These expect a local Android Studio, Java, and Android NDK installation; check the paths configured in the scripts and your environment before running them.
 
-## Estructura del proyecto
+## Project structure
 
 ```text
 CreamEngine/
@@ -117,26 +117,26 @@ CreamEngine/
 └── build-android.bat
 ```
 
-## Charts hápticos
+## Haptic charts
 
-CreamEngine incluye `tools/HapticChartEditor.html`. Ábrelo directamente en un navegador moderno; no requiere instalación ni servidor local.
+CreamEngine includes `tools/HapticChartEditor.html`. Open it directly in a modern browser; no installation or local server is required.
 
-El editor permite:
+The editor allows you to:
 
-- Definir BPM, compases, subdivisiones y compás musical.
-- Cargar un archivo de audio o vídeo como referencia temporal.
-- Colocar, mover y editar pulsos en una línea de tiempo.
-- Configurar duración e intensidad para el motor izquierdo y derecho.
-- Importar y exportar charts JSON.
-- Probar la vibración con un gamepad compatible y un navegador que admita la API de vibración.
+- Set BPM, measures, subdivisions, and time signature.
+- Load an audio or video file as a timing reference.
+- Place, move, and edit pulses on a timeline.
+- Configure duration and intensity for the left and right motors.
+- Import and export JSON charts.
+- Test vibration with a compatible gamepad and a browser that supports the vibration API.
 
-Los charts exportados utilizan eventos con los campos `atMs`, `durationMs`, `left` y `right`. El runtime puede reproducirlos mediante `HapticUtil.playChart()` o `HapticUtil.playChartFromJson()`.
+Exported charts use events with the `atMs`, `durationMs`, `left`, and `right` fields. The runtime can play them using `HapticUtil.playChart()` or `HapticUtil.playChartFromJson()`.
 
 ## Mods
 
-El sistema inicial de mods busca carpetas dentro de `mods/`. Cada mod debe incluir un archivo `mod.json` con sus metadatos.
+The initial mod system scans folders inside `mods/`. Each mod must include a `mod.json` file containing its metadata.
 
-Ejemplo:
+Example:
 
 ```json
 {
@@ -148,16 +148,16 @@ Ejemplo:
 }
 ```
 
-Los assets del mod pueden colocarse dentro de su carpeta `assets/` para que el sistema de resolución de recursos pueda encontrar archivos sobrescritos.
+Mod assets can be placed inside the mod's `assets/` directory so the asset resolver can find overridden files.
 
-> El soporte de mods todavía es inicial y puede variar según el target. No todas las funciones de un sistema completo de modding están implementadas.
+> Mod support is still in its early stages and may vary depending on the target platform. Not every feature of a complete modding system has been implemented.
 
-## Créditos y recursos
+## Credits and assets
 
-CreamEngine utiliza HaxeFlixel, OpenFL, Lime y otras herramientas de código abierto. El repositorio también contiene recursos del proyecto **Friday Night Funkin'** y de **The Funkin' Crew**.
+CreamEngine uses HaxeFlixel, OpenFL, Lime, and other open-source tools. The repository also contains project assets from **Friday Night Funkin'** and **The Funkin' Crew**.
 
-Los créditos y los términos de uso de cada recurso pertenecen a sus respectivos autores. Antes de redistribuir builds o assets, revisa las licencias y condiciones aplicables. CreamEngine no implica afiliación oficial con The Funkin' Crew.
+Credits and usage terms for each asset belong to their respective authors. Before redistributing builds or assets, review the applicable licenses and terms. CreamEngine is not officially affiliated with The Funkin' Crew.
 
-## Licencia
+## License
 
-No se especifica una licencia para CreamEngine en este README. Consulta los archivos del repositorio y los avisos de cada recurso antes de reutilizar o redistribuir el código y los assets.
+No license for CreamEngine is specified in this README. Check the repository files and the notices accompanying individual assets before reusing or redistributing the code or assets.
