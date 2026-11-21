@@ -1,12 +1,13 @@
+
 package funkin.play;
 
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.FlxCamera;
+import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxObject;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import funkin.Conductor;
-import funkin.modding.ModManager;
 import funkin.play.characters.Character;
 import funkin.play.stage.Stage;
 import funkin.play.song.Song;
@@ -21,6 +22,7 @@ class PlayState extends FlxState {
 
     public var songData:Song;
     public var stage:Stage;
+
     public var boyfriend:Character;
     public var dad:Character;
     public var gf:Character;
@@ -31,6 +33,7 @@ class PlayState extends FlxState {
 
     public var playerStrums:Strumline;
     public var opponentStrums:Strumline;
+
     public var allNotes:FlxTypedGroup<Note>;
     public var unspawnNotes:Array<SongNote> = [];
 
@@ -38,39 +41,53 @@ class PlayState extends FlxState {
     public var songScore:Int = 0;
     public var songMisses:Int = 0;
 
+    static inline var NOTE_SPAWN_TIME:Float = 1800;
+    static inline var NOTE_SPEED:Float = 0.45;
+    static inline var HIT_WINDOW:Float = 160;
+    static inline var MISS_WINDOW:Float = 200;
+
     public function new() {
         super();
         instance = this;
     }
 
-    override public function create() {
+    override public function create():Void {
         super.create();
 
         camGame = new FlxCamera();
         camHUD = new FlxCamera();
         camHUD.bgColor.alpha = 0;
+
         FlxG.cameras.reset(camGame);
         FlxG.cameras.add(camHUD, false);
 
         songData = Song.loadSong(currentSong, currentDifficulty);
-        if (songData != null) {
 
-            if (songData.bpm > 0)
-                Conductor.instance.forceBPM(songData.bpm);
+        if (songData != null) {
             unspawnNotes = songData.notes.copy();
         }
 
-        var stageName = (songData != null && songData.metadata != null && songData.metadata.playData != null && songData.metadata.playData.stage != null)
-            ? songData.metadata.playData.stage
+        var playData:Dynamic = songData != null && songData.metadata != null
+            ? songData.metadata.playData
+            : null;
+
+        var characters:Dynamic = playData != null
+            ? Reflect.field(playData, "characters")
+            : null;
+
+        var stageName:String = playData != null && Reflect.field(playData, "stage") != null
+            ? Reflect.field(playData, "stage")
             : "mainStage";
+
         stage = new Stage(stageName);
         add(stage);
 
-        var bfName = (songData != null && songData.metadata != null && songData.metadata.playData != null && songData.metadata.playData.characters != null)
-            ? songData.metadata.playData.characters.player
+        var bfName:String = characters != null && Reflect.field(characters, "player") != null
+            ? Reflect.field(characters, "player")
             : "bf";
-        var dadName = (songData != null && songData.metadata != null && songData.metadata.playData != null && songData.metadata.playData.characters != null)
-            ? songData.metadata.playData.characters.opponent
+
+        var dadName:String = characters != null && Reflect.field(characters, "opponent") != null
+            ? Reflect.field(characters, "opponent")
             : "dad";
 
         gf = new Character(stage.gfPos[0], stage.gfPos[1], "gf", false);
@@ -81,16 +98,23 @@ class PlayState extends FlxState {
         add(dad);
         add(boyfriend);
 
-        camFollow = new FlxObject(0, 0, 1, 1);
-        camFollow.setPosition(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
+        camFollow = new FlxObject();
+        camFollow.setPosition(
+            boyfriend.getMidpoint().x - 100,
+            boyfriend.getMidpoint().y - 100
+        );
+
         add(camFollow);
-        camGame.follow(camFollow, LOCKON, 0.04);
+
+        camGame.follow(camFollow, FlxCameraFollowStyle.LOCKON, 0.04);
         camGame.zoom = stage.defaultZoom;
 
         opponentStrums = new Strumline(100, 50);
         playerStrums = new Strumline(FlxG.width - 550, 50);
+
         opponentStrums.cameras = [camHUD];
         playerStrums.cameras = [camHUD];
+
         add(opponentStrums);
         add(playerStrums);
 
@@ -102,65 +126,116 @@ class PlayState extends FlxState {
     }
 
     public function startSong():Void {
-        var songFolder = 'gameplay/songs/$currentSong';
-        var instPrefix = 'Inst';
-        Conductor.instance.play(songFolder, instPrefix);
+        var songFolder:String = 'gameplay/songs/$currentSong';
+
+        Conductor.instance.play(songFolder, "Inst");
+
+        if (songData != null && songData.metadata != null
+            && songData.metadata.timeChanges != null
+            && songData.metadata.timeChanges.length > 0) {
+
+            Conductor.instance.mapTimeChanges(songData.metadata.timeChanges);
+        } else if (songData != null && songData.bpm > 0) {
+            Conductor.instance.forceBPM(songData.bpm);
+        }
     }
 
-    override public function update(elapsed:Float) {
+    override public function update(elapsed:Float):Void {
         super.update(elapsed);
 
+        if (songData == null || allNotes == null) return;
 
-        while (unspawnNotes.length > 0 && (unspawnNotes[0].t - Conductor.instance.songPosition) < 1800) {
-            var nData = unspawnNotes.shift();
-            var note = new Note(nData.t, nData.d);
-            allNotes.add(note);
-        }
+        spawnNotes();
+        updateNotes();
+        handleInput();
+    }
 
-        allNotes.forEachAlive(function(daNote:Note) {
-            var isPlayerNote = daNote.noteData >= 4;
-            var targetStrum = isPlayerNote ? playerStrums : opponentStrums;
-            var dir = daNote.noteData % 4;
-            var receptor = targetStrum.receptors[dir];
+    function spawnNotes():Void {
+        var songPosition:Float = Conductor.instance.songPosition;
 
-            daNote.x = receptor.x;
-            var noteSpeed = (songData != null) ? songData.speed : 1.0;
-            daNote.y = receptor.y + (0.45 * (Conductor.instance.songPosition - daNote.strumTime) * noteSpeed);
+        while (unspawnNotes.length > 0
+            && unspawnNotes[0].t - songPosition < NOTE_SPAWN_TIME) {
 
-            // CPU hit (oponente)
-            if (!isPlayerNote && daNote.strumTime <= Conductor.instance.songPosition) {
-                targetStrum.playConfirm(dir);
-                dad.playAnim(getSingAnim(dir), true);
-                daNote.kill();
-                allNotes.remove(daNote, true);
-                daNote.destroy();
+            var noteData:SongNote = unspawnNotes.shift();
+            var note:Note = new Note(noteData.t, noteData.d);
+
+            if (noteData.l != null && noteData.l > 0) {
+                note.sustainLength = noteData.l;
             }
 
-            // Nota perdida (player)
-            if (isPlayerNote && daNote.strumTime < Conductor.instance.songPosition - 200 && !daNote.wasGoodHit) {
-                daNote.tooLate = true;
-                noteMiss(dir);
-                daNote.kill();
-                allNotes.remove(daNote, true);
-                daNote.destroy();
+            allNotes.add(note);
+        }
+    }
+
+    function updateNotes():Void {
+        var songPosition:Float = Conductor.instance.songPosition;
+        var notesToRemove:Array<Note> = [];
+
+        allNotes.forEachAlive(function(note:Note) {
+            var isPlayerNote:Bool = note.noteData >= 4;
+            var direction:Int = note.noteData % 4;
+
+            var targetStrum:Strumline = isPlayerNote
+                ? playerStrums
+                : opponentStrums;
+
+            if (direction < 0 || direction >= targetStrum.receptors.length) {
+                notesToRemove.push(note);
+                return;
+            }
+
+            var receptor = targetStrum.receptors[direction];
+
+            note.x = receptor.x;
+
+            var noteSpeed:Float = songData.speed > 0
+                ? songData.speed
+                : 1.0;
+
+            note.y = receptor.y
+                + NOTE_SPEED * (songPosition - note.strumTime) * noteSpeed;
+
+            if (!isPlayerNote && note.strumTime <= songPosition) {
+                targetStrum.playConfirm(direction);
+                dad.playAnim(getSingAnim(direction), true);
+                notesToRemove.push(note);
+            }
+
+            if (isPlayerNote
+                && note.strumTime < songPosition - MISS_WINDOW
+                && !note.wasGoodHit) {
+
+                note.tooLate = true;
+                noteMiss(direction);
+                notesToRemove.push(note);
             }
         });
 
-        handleInput();
+        for (note in notesToRemove) {
+            removeNote(note);
+        }
+    }
+
+    function removeNote(note:Note):Void {
+        if (note == null) return;
+
+        note.kill();
+        allNotes.remove(note, true);
+        note.destroy();
     }
 
     function handleInput():Void {
         var pressArray:Array<Bool> = [
             FlxG.keys.justPressed.LEFT || FlxG.keys.justPressed.A,
             FlxG.keys.justPressed.DOWN || FlxG.keys.justPressed.S,
-            FlxG.keys.justPressed.UP   || FlxG.keys.justPressed.W,
+            FlxG.keys.justPressed.UP || FlxG.keys.justPressed.W,
             FlxG.keys.justPressed.RIGHT || FlxG.keys.justPressed.D
         ];
 
         var releaseArray:Array<Bool> = [
             FlxG.keys.justReleased.LEFT || FlxG.keys.justReleased.A,
             FlxG.keys.justReleased.DOWN || FlxG.keys.justReleased.S,
-            FlxG.keys.justReleased.UP   || FlxG.keys.justReleased.W,
+            FlxG.keys.justReleased.UP || FlxG.keys.justReleased.W,
             FlxG.keys.justReleased.RIGHT || FlxG.keys.justReleased.D
         ];
 
@@ -168,6 +243,7 @@ class PlayState extends FlxState {
             if (releaseArray[i]) {
                 playerStrums.playStatic(i);
             }
+
             if (pressArray[i]) {
                 playerStrums.playPress(i);
                 checkNoteHit(i);
@@ -177,28 +253,35 @@ class PlayState extends FlxState {
 
     function checkNoteHit(direction:Int):Void {
         var hitNote:Note = null;
-        var minDiff:Float = 160;
+        var minDiff:Float = HIT_WINDOW;
 
-        allNotes.forEachAlive(function(daNote:Note) {
-            if (daNote.noteData >= 4 && (daNote.noteData % 4) == direction && !daNote.wasGoodHit) {
-                var diff = Math.abs(daNote.strumTime - Conductor.instance.songPosition);
+        allNotes.forEachAlive(function(note:Note) {
+            if (note.noteData >= 4
+                && note.noteData % 4 == direction
+                && !note.wasGoodHit
+                && !note.tooLate) {
+
+                var diff:Float = Math.abs(
+                    note.strumTime - Conductor.instance.songPosition
+                );
+
                 if (diff < minDiff) {
                     minDiff = diff;
-                    hitNote = daNote;
+                    hitNote = note;
                 }
             }
         });
 
         if (hitNote != null) {
             hitNote.wasGoodHit = true;
+
             playerStrums.playConfirm(direction);
             boyfriend.playAnim(getSingAnim(direction), true);
+
             songScore += 350;
             health = Math.min(2.0, health + 0.04);
 
-            hitNote.kill();
-            allNotes.remove(hitNote, true);
-            hitNote.destroy();
+            removeNote(hitNote);
         } else {
             noteMiss(direction);
         }
@@ -208,11 +291,12 @@ class PlayState extends FlxState {
         songMisses++;
         songScore -= 10;
         health = Math.max(0, health - 0.05);
+
         boyfriend.playAnim(getSingAnim(direction) + "miss", true);
     }
 
-    function getSingAnim(dir:Int):String {
-        return switch (dir) {
+    function getSingAnim(direction:Int):String {
+        return switch (direction) {
             case 0: "singLEFT";
             case 1: "singDOWN";
             case 2: "singUP";
@@ -220,4 +304,17 @@ class PlayState extends FlxState {
             default: "singUP";
         };
     }
+
+    override public function destroy():Void {
+        if (Conductor.instance != null) {
+            Conductor.instance.stop();
+        }
+
+        if (instance == this) {
+            instance = null;
+        }
+
+        super.destroy();
+    }
 }
+
