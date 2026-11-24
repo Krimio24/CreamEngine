@@ -2,7 +2,9 @@ package funkin.ui.title;
 
 import funkin.ui.mainmenu.MainMenuState;
 import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
 import funkin.util.HapticUtil;
+import funkin.util.ScreenDimmer;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.FlxSprite;
@@ -19,8 +21,70 @@ import openfl.utils.Assets;
 
 /** Title screen adapted to the assets and APIs available in CreamEngine. */
 class TitleState extends FlxState {
+	public static var instance:TitleState;
 	public static var initialized:Bool = false;
+	public static var startInAttract:Bool = false;
+	public static var startSlideUp:Bool = false;
 	public static var onStart:Void->Void;
+	public static var savedWindowX:Int = -1;
+	public static var savedWindowY:Int = -1;
+	static var globalKeysHooked:Bool = false;
+	static var lastToggleTime:Float = 0;
+
+	public static function restoreWindowPosition():Void {
+		#if (cpp && windows)
+		var window = openfl.Lib.application.window;
+		if (window == null) return;
+
+		if (savedWindowX >= 0 && savedWindowY >= 0) {
+			window.move(savedWindowX, savedWindowY);
+		} else {
+			var display = window.display;
+			if (display != null) {
+				var cx:Int = Std.int(display.bounds.x + (display.bounds.width - window.width) / 2);
+				var cy:Int = Std.int(display.bounds.y + (display.bounds.height - window.height) / 2);
+				window.move(cx, cy);
+			}
+		}
+		#end
+	}
+
+	public static function toggleFullscreen():Void {
+		var currentTime = haxe.Timer.stamp();
+		if (currentTime - lastToggleTime < 0.35) return;
+		lastToggleTime = currentTime;
+
+		var window = openfl.Lib.application.window;
+		if (window == null) return;
+
+		var newFullscreen = !window.fullscreen;
+		window.fullscreen = newFullscreen;
+		FlxG.fullscreen = newFullscreen;
+
+		if (!newFullscreen) {
+			ScreenDimmer.finish();
+			restoreWindowPosition();
+		} else {
+			var display = window.display;
+			if (display != null) {
+				ScreenDimmer.keepSecondaryOnly(Std.int(display.bounds.x), Std.int(display.bounds.y), Std.int(display.bounds.width), Std.int(display.bounds.height));
+			} else {
+				ScreenDimmer.keepSecondaryOnly(-99999, -99999, 0, 0);
+			}
+		}
+	}
+
+	public static function initGlobalKeys():Void {
+		if (globalKeysHooked) return;
+		globalKeysHooked = true;
+		FlxG.signals.preUpdate.add(function() {
+			if (FlxG.keys != null) {
+				if (FlxG.keys.justPressed.F11 || (FlxG.keys.pressed.ALT && FlxG.keys.justPressed.ENTER) || (FlxG.keys.justPressed.ALT && FlxG.keys.pressed.ENTER)) {
+					toggleFullscreen();
+				}
+			}
+		});
+	}
 
 	var logo:FlxSprite;
 	var girlfriend:FlxSprite;
@@ -39,7 +103,48 @@ class TitleState extends FlxState {
 	var attractTimer:FlxTimer;
 
 	override public function create():Void {
+		instance = this;
 		super.create();
+		initGlobalKeys();
+
+		#if (cpp && windows)
+		var win = openfl.Lib.application.window;
+		if (win != null && !win.fullscreen && savedWindowX < 0) {
+			savedWindowX = win.x;
+			savedWindowY = win.y;
+		}
+		#end
+
+		if (startSlideUp) {
+			startSlideUp = false;
+			#if (cpp && windows)
+			var window = openfl.Lib.application.window;
+			if (window != null) {
+				var display = window.display;
+				var targetY:Int = (display != null) ? Std.int(display.bounds.y + display.bounds.height + 60) : 1200;
+				var finalY:Int = (savedWindowY >= 0) ? savedWindowY : ((display != null) ? Std.int(display.bounds.y + (display.bounds.height - window.height) / 2) : 100);
+				var finalX:Int = (savedWindowX >= 0) ? savedWindowX : ((display != null) ? Std.int(display.bounds.x + (display.bounds.width - window.width) / 2) : 100);
+
+				window.move(finalX, targetY);
+				ScreenDimmer.start();
+				ScreenDimmer.setAlpha(1.0);
+
+				FlxTween.num(1.0, 0.0, 1.4, { ease: FlxEase.quadOut }, function(progress:Float) {
+					window.move(finalX, Std.int(finalY + (targetY - finalY) * progress));
+					ScreenDimmer.setAlpha(progress);
+				}).onComplete = function(_) {
+					ScreenDimmer.finish();
+					restoreWindowPosition();
+				};
+			}
+			#end
+		}
+
+		if (startInAttract) {
+			startInAttract = false;
+			FlxG.switchState(() -> new AttractState());
+			return;
+		}
 		FlxG.scaleMode = new FillScaleMode();
 
 		var background = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
@@ -129,11 +234,12 @@ class TitleState extends FlxState {
 		}
 
 		if (FlxG.keys.justPressed.ESCAPE) {
+			ScreenDimmer.finish();
 			openfl.Lib.application.window.close();
 			return;
 		}
 
-		if (FlxG.keys.justPressed.ENTER && introStarted) {
+		if (FlxG.keys.justPressed.ENTER && introStarted && !FlxG.keys.pressed.ALT) {
 			if (!skippedIntro) {
 				skipIntro();
 			} else if (!transitioning && onStart != null) {
@@ -149,14 +255,61 @@ class TitleState extends FlxState {
 		}
 	}
 
-	function moveToAttract():Void {
-		if (transitioning || !introStarted) return;
+	public static function moveToAttract():Void {
+		trace("TitleState.moveToAttract() called statically from mod/script!");
+		if (instance != null && instance.exists && flixel.FlxG.camera != null) {
+			instance.moveToAttractInstance();
+		} else if (FlxG.game != null && FlxG.state != null && Std.isOfType(FlxG.state, TitleState) && FlxG.camera != null) {
+			cast(FlxG.state, TitleState).moveToAttractInstance();
+		} else {
+			startInAttract = true;
+		}
+	}
+
+	public function moveToAttractInstance():Void {
+		if (transitioning) return;
 		transitioning = true;
-		if (FlxG.sound.music != null) FlxG.sound.music.fadeOut(2, 0);
-		FlxTween.tween(FlxG.camera, { y: FlxG.camera.y - 500 }, 2);
-		FlxG.camera.fade(FlxColor.BLACK, 2, false, function() {
-			FlxG.switchState(() -> new AttractState());
-		});
+		#if (cpp && windows)
+		if (attractTimer != null) attractTimer.cancel();
+		#end
+		if (FlxG.sound.music != null) FlxG.sound.music.fadeOut(1.6, 0);
+
+		#if (cpp && windows)
+		var window = openfl.Lib.application.window;
+		if (window != null && !window.fullscreen) {
+			if (savedWindowX < 0) savedWindowX = window.x;
+			if (savedWindowY < 0) savedWindowY = window.y;
+			var startX = window.x;
+			var startY = window.y;
+			var display = window.display;
+			var targetY:Int = (display != null) ? Std.int(display.bounds.y + display.bounds.height + 60) : (startY + 1200);
+
+			ScreenDimmer.start();
+			FlxTween.num(0.0, 1.0, 1.6, { ease: FlxEase.quadIn }, function(progress:Float) {
+				window.move(startX, Std.int(startY + (targetY - startY) * progress));
+				ScreenDimmer.setAlpha(progress);
+			}).onComplete = function(_) {
+				restoreWindowPosition();
+				window.fullscreen = true;
+				FlxG.fullscreen = true;
+				var disp = window.display;
+				if (disp != null) {
+					ScreenDimmer.keepSecondaryOnly(Std.int(disp.bounds.x), Std.int(disp.bounds.y), Std.int(disp.bounds.width), Std.int(disp.bounds.height));
+				} else {
+					ScreenDimmer.keepSecondaryOnly(-99999, -99999, 0, 0);
+				}
+				FlxG.switchState(() -> new AttractState());
+			};
+			return;
+		}
+		#end
+
+		var window = openfl.Lib.application.window;
+		if (window != null) {
+			window.fullscreen = true;
+		}
+		FlxG.fullscreen = true;
+		FlxG.switchState(() -> new AttractState());
 	}
 
 	function onBeatHit(beat:Int):Void {

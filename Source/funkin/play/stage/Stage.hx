@@ -2,9 +2,14 @@ package funkin.play.stage;
 
 import flixel.group.FlxGroup;
 import flixel.FlxSprite;
-import flixel.graphics.frames.FlxAtlasFrames;
 import haxe.Json;
-import funkin.modding.ModManager;
+import haxe.io.Path;
+import openfl.Assets;
+#if sys
+import openfl.display.BitmapData;
+import sys.FileSystem;
+import sys.io.File;
+#end
 
 typedef StageProp = {
     var name:String;
@@ -35,8 +40,74 @@ class Stage extends FlxGroup {
         loadStage(stageName);
     }
 
+    function normalizePath(path:String):String {
+        if (path == null) return "";
+        path = StringTools.replace(path, "\\", "/");
+        while (StringTools.startsWith(path, "/")) path = path.substr(1);
+        if (StringTools.startsWith(path, "assets/")) path = path.substr(7);
+        return path;
+    }
+
+    function resolveAssetPath(relPath:String):String {
+        var clean = normalizePath(relPath);
+        if (clean == "") return null;
+
+        #if sys
+        var modsRoot = "C:/funkin-cream/mods";
+        if (FileSystem.exists(modsRoot) && FileSystem.isDirectory(modsRoot)) {
+            for (entry in FileSystem.readDirectory(modsRoot)) {
+                var modCandidate = Path.join([modsRoot, entry, clean]);
+                if (FileSystem.exists(modCandidate)) return modCandidate;
+            }
+        }
+
+        var diskAsset = Path.join(["assets", clean]);
+        if (FileSystem.exists(diskAsset)) return diskAsset;
+
+        var progAsset = Path.join([Path.directory(Sys.programPath()), "assets", clean]);
+        if (FileSystem.exists(progAsset)) return progAsset;
+        #end
+
+        var openflId = 'assets/$clean';
+        if (Assets.exists(openflId)) return openflId;
+
+        return null;
+    }
+
+    function readTextAsset(relPath:String):String {
+        var resolved = resolveAssetPath(relPath);
+        if (resolved == null) return null;
+
+        #if sys
+        if (FileSystem.exists(resolved)) return File.getContent(resolved);
+        #end
+
+        if (Assets.exists(resolved)) return Assets.getText(resolved);
+
+        return null;
+    }
+
+    function applyGraphic(spr:FlxSprite, pngRelPath:String):Void {
+        var resolved = resolveAssetPath(pngRelPath);
+        if (resolved == null) return;
+
+        #if sys
+        if (FileSystem.exists(resolved)) {
+            var bmp = BitmapData.fromFile(resolved);
+            if (bmp != null) {
+                spr.loadGraphic(bmp);
+                return;
+            }
+        }
+        #end
+
+        if (Assets.exists(resolved)) {
+            spr.loadGraphic(Assets.getBitmapData(resolved));
+        }
+    }
+
     public function loadStage(stageName:String):Void {
-        var rawJson = ModManager.getContent('gameplay/stages/$stageName/$stageName.json');
+        var rawJson = readTextAsset('gameplay/stages/$stageName/$stageName.json');
         if (rawJson != null) {
             try {
                 stageData = Json.parse(rawJson);
@@ -61,10 +132,7 @@ class Stage extends FlxGroup {
             if (stageData.props != null) {
                 for (prop in stageData.props) {
                     var spr = new FlxSprite(prop.position[0], prop.position[1]);
-                    var pngPath = ModManager.getAssetPath('assets/${prop.assetPath}.png');
-                    if (ModManager.exists(pngPath)) {
-                        spr.loadGraphic(pngPath);
-                    }
+                    applyGraphic(spr, '${prop.assetPath}.png');
                     if (prop.scroll != null) {
                         spr.scrollFactor.set(prop.scroll[0], prop.scroll[1]);
                     }

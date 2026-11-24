@@ -1,7 +1,12 @@
 package funkin.play.song;
 
 import haxe.Json;
-import funkin.modding.ModManager;
+import haxe.io.Path;
+import openfl.Assets;
+#if sys
+import sys.FileSystem;
+import sys.io.File;
+#end
 
 typedef SongNote = {
     var t:Float;
@@ -41,11 +46,45 @@ class Song {
         this.songId = songId;
     }
 
+    static function normalizePath(path:String):String {
+        if (path == null) return "";
+        path = StringTools.replace(path, "\\", "/");
+        while (StringTools.startsWith(path, "/")) path = path.substr(1);
+        if (StringTools.startsWith(path, "assets/")) path = path.substr(7);
+        return path;
+    }
+
+    static function readTextAsset(relPath:String):String {
+        var clean = normalizePath(relPath);
+        if (clean == "") return null;
+
+        #if sys
+        var modsRoot = "C:/funkin-cream/mods";
+        if (FileSystem.exists(modsRoot) && FileSystem.isDirectory(modsRoot)) {
+            for (entry in FileSystem.readDirectory(modsRoot)) {
+                var modCandidate = Path.join([modsRoot, entry, clean]);
+                if (FileSystem.exists(modCandidate)) return File.getContent(modCandidate);
+            }
+        }
+
+        var diskAsset = Path.join(["assets", clean]);
+        if (FileSystem.exists(diskAsset)) return File.getContent(diskAsset);
+
+        var progAsset = Path.join([Path.directory(Sys.programPath()), "assets", clean]);
+        if (FileSystem.exists(progAsset)) return File.getContent(progAsset);
+        #end
+
+        var openflId = 'assets/$clean';
+        if (Assets.exists(openflId)) return Assets.getText(openflId);
+
+        return null;
+    }
+
     public static function loadSong(songId:String, difficulty:String = "normal"):Null<Song> {
         var song = new Song(songId);
 
         var metaPath = 'gameplay/songs/$songId/$songId-metadata.json';
-        var metaRaw = ModManager.getContent(metaPath);
+        var metaRaw = readTextAsset(metaPath);
         if (metaRaw != null) {
             try {
                 song.metadata = Json.parse(metaRaw);
@@ -59,7 +98,7 @@ class Song {
         }
 
         var chartPath = 'gameplay/songs/$songId/$songId-chart.json';
-        var chartRaw = ModManager.getContent(chartPath);
+        var chartRaw = readTextAsset(chartPath);
         if (chartRaw != null) {
             try {
                 song.chart = Json.parse(chartRaw);

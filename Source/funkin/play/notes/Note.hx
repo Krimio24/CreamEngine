@@ -1,8 +1,8 @@
 package funkin.play.notes;
 
+import sys.FileSystem;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
-import funkin.modding.ModManager;
 
 class Note extends FlxSprite {
     public var strumTime:Float = 0;
@@ -21,10 +21,10 @@ class Note extends FlxSprite {
         this.noteData = noteData;
         this.isSustainNote = isSustainNote;
 
-        var notePng = ModManager.getAssetPath('assets/gameplay/notestyles/funkin/notes.png');
-        var noteXml = ModManager.getAssetPath('assets/gameplay/notestyles/funkin/notes.xml');
+        var notePng:String = 'assets/gameplay/notestyles/funkin/notes.png';
+        var noteXml:String = 'assets/gameplay/notestyles/funkin/notes.xml';
 
-        if (ModManager.exists(notePng) && ModManager.exists(noteXml)) {
+        if (FileSystem.exists(notePng) && FileSystem.exists(noteXml)) {
             frames = FlxAtlasFrames.fromSparrow(notePng, noteXml);
         }
 

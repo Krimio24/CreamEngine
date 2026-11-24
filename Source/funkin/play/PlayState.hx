@@ -1,4 +1,3 @@
-
 package funkin.play;
 
 import flixel.FlxG;
@@ -126,7 +125,7 @@ class PlayState extends FlxState {
     }
 
     public function startSong():Void {
-        var songFolder:String = 'gameplay/songs/$currentSong';
+        var songFolder:String = 'assets/gameplay/songs/$currentSong';
 
         Conductor.instance.play(songFolder, "Inst");
 

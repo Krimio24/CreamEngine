@@ -1,0 +1,13 @@
+{
+  "name": "funkin-ts",
+  "version": "0.2.0",
+  "private": false,
+  "type": "module",
+  "description": "Generated dynamic TypeScript bindings for CreamEngine and HaxeFlixel",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

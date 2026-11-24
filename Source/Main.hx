@@ -1,5 +1,6 @@
 package;
 
+import funkin.play.PlayState;
 import funkin.ui.mainmenu.MainMenuState;
 import flixel.FlxG;
 import flixel.FlxGame;
@@ -13,7 +14,7 @@ class Main extends Sprite {
 	public function new() {
 		super();
 
-		game = new FlxGame(1280, 720, TitleState, 90, 90, true, false);
+		game = new FlxGame(1280, 720, MainMenuState, 90, 90, true, false);
 
 		@:privateAccess
 		game._customSoundTray = FunkinSoundTray;

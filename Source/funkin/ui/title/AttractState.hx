@@ -8,6 +8,7 @@ import flixel.util.FlxColor;
 import funkin.Conductor;
 import funkin.util.HapticUtil;
 import funkin.util.VideoUtil;
+import funkin.util.ScreenDimmer;
 import openfl.utils.Assets;
 import haxe.io.Path;
 import lime.system.System;
@@ -91,10 +92,10 @@ class AttractState extends FlxState {
 
 	#if ((cpp && windows) || android)
 	function startVideo(path:String, hapticChartPath:String):Void {
-		videoSprite = new VideoUtil().createVideo(path, returnToTitle);
+		videoSprite = new VideoUtil().createVideo(path, () -> returnToTitle(false));
 		if (videoSprite == null) {
 			trace('Could not play attract video "$path"');
-			returnToTitle();
+			returnToTitle(false);
 			return;
 		}
 		videoSprite.setGraphicSize(FlxG.width, FlxG.height);
@@ -109,6 +110,10 @@ class AttractState extends FlxState {
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
+		if (FlxG.keys.justPressed.ESCAPE) {
+			returnToTitle(true);
+			return;
+		}
 		if (FlxG.keys.pressed.ANY) {
 			holdTime += elapsed;
 			skipPrompt.alpha = 1;
@@ -116,10 +121,10 @@ class AttractState extends FlxState {
 			holdTime = Math.max(0, holdTime - elapsed * 2);
 			skipPrompt.alpha = 0.5;
 		}
-		if (holdTime >= HOLD_TO_SKIP_SECONDS) returnToTitle();
+		if (holdTime >= HOLD_TO_SKIP_SECONDS) returnToTitle(true);
 	}
 
-	function returnToTitle():Void {
+	function returnToTitle(skipped:Bool = false):Void {
 		if (finished) return;
 		finished = true;
 		HapticUtil.stopChart();
@@ -128,6 +133,18 @@ class AttractState extends FlxState {
 			remove(videoSprite, true);
 			videoSprite.destroy();
 			videoSprite = null;
+		}
+		#end
+		#if (cpp && windows)
+		var window = openfl.Lib.application.window;
+		if (window != null) {
+			window.fullscreen = false;
+			FlxG.fullscreen = false;
+			var display = window.display;
+			var targetY:Int = (display != null) ? Std.int(display.bounds.y + display.bounds.height + 60) : 1200;
+			var currentX:Int = (TitleState.savedWindowX >= 0) ? TitleState.savedWindowX : ((display != null) ? Std.int(display.bounds.x + (display.bounds.width - window.width) / 2) : 100);
+			window.move(currentX, targetY);
+			TitleState.startSlideUp = true;
 		}
 		#end
 		FlxG.switchState(() -> new TitleState());

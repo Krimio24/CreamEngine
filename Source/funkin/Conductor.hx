@@ -1,5 +1,6 @@
 package funkin;
 
+import funkin.util.TaskBarUtil;
 import flixel.FlxG;
 import flixel.sound.FlxSound;
 import haxe.Json;
@@ -20,6 +21,7 @@ class Conductor {
 
 	/** Assign callbacks with forms such as `Conductor.instance.onBeatHit = function(beat:Int) {}`. */
 	public var onBeatHit:Int->Void;
+
 	public var onStepHit:Int->Void;
 	public var onMeasureHit:Int->Void;
 	public var onTimeChange:Int->Void;
@@ -57,7 +59,8 @@ class Conductor {
 
 	/** Starts an audio asset using metadata already parsed from JSON. */
 	public function playParams(path:String, params:Dynamic):FlxSound {
-		if (music != null) music.stop();
+		if (music != null)
+			music.stop();
 		var data = params == null ? {} : params;
 		metadata = data;
 		var format = Std.string(read(data, "timeFormat", "ms")).toLowerCase();
@@ -86,7 +89,8 @@ class Conductor {
 
 	/** Changes tempo immediately at the current song position. */
 	public function forceBPM(value:Float):Void {
-		if (value <= 0) return;
+		if (value <= 0)
+			return;
 		runtimeChange = {
 			t: songPosition,
 			b: beatAt(songPosition),
@@ -98,7 +102,8 @@ class Conductor {
 
 	/** Smoothly changes tempo over `durationMs` milliseconds of song time. */
 	public function tweenBPM(value:Float, durationMs:Float):Void {
-		if (value <= 0) return;
+		if (value <= 0)
+			return;
 		runtimeChange = {
 			t: songPosition,
 			b: beatAt(songPosition),
@@ -109,7 +114,8 @@ class Conductor {
 	}
 
 	public function stop():Void {
-		if (music != null) music.stop();
+		if (music != null)
+			music.stop();
 		music = null;
 		songPosition = 0;
 		lastBeat = lastStep = lastMeasure = lastTimeChange = -1;
@@ -123,7 +129,8 @@ class Conductor {
 	}
 
 	function updateFromMusic():Void {
-		if (music == null) return;
+		if (music == null)
+			return;
 		songPosition = music.time;
 		var position = songPosition;
 		bpm = bpmAt(position);
@@ -142,33 +149,42 @@ class Conductor {
 			lastMeasure = measure - 1;
 		}
 		if (beat > lastBeat) {
-			for (value in (lastBeat + 1)...(beat + 1)) if (onBeatHit != null) onBeatHit(value);
+			for (value in (lastBeat + 1)...(beat + 1))
+				if (onBeatHit != null)
+					onBeatHit(value);
 			lastBeat = beat;
 		}
 		if (step > lastStep) {
-			for (value in (lastStep + 1)...(step + 1)) if (onStepHit != null) onStepHit(value);
+			for (value in (lastStep + 1)...(step + 1))
+				if (onStepHit != null)
+					onStepHit(value);
 			lastStep = step;
 		}
 		if (measure > lastMeasure) {
-			for (value in (lastMeasure + 1)...(measure + 1)) if (onMeasureHit != null) onMeasureHit(value);
+			for (value in (lastMeasure + 1)...(measure + 1))
+				if (onMeasureHit != null)
+					onMeasureHit(value);
 			lastMeasure = measure;
 		}
 		var changeIndex = activeChangeIndex(position);
 		if (changeIndex != lastTimeChange) {
 			lastTimeChange = changeIndex;
-			if (changeIndex >= 0 && onTimeChange != null) onTimeChange(changeIndex);
+			if (changeIndex >= 0 && onTimeChange != null)
+				onTimeChange(changeIndex);
 		}
 	}
 
 	function bpmAt(position:Float):Float {
 		if (runtimeChange != null && position >= runtimeChange.t) {
 			var duration:Float = runtimeChange.duration;
-			if (duration <= 0 || position >= runtimeChange.t + duration) return runtimeChange.to;
+			if (duration <= 0 || position >= runtimeChange.t + duration)
+				return runtimeChange.to;
 			var ratio = (position - runtimeChange.t) / duration;
 			return runtimeChange.from + (runtimeChange.to - runtimeChange.from) * ratio;
 		}
 		var index = activeChangeIndex(position);
-		if (index < 0) return 100;
+		if (index < 0)
+			return 100;
 		var point = timeChanges[index];
 		var current = validBpm(read(point, "bpm", 100));
 		var next = index + 1 < timeChanges.length ? timeChanges[index + 1] : null;
@@ -192,14 +208,16 @@ class Conductor {
 			var from:Float = runtimeChange.from;
 			var to:Float = runtimeChange.to;
 			var elapsed = position - start;
-			if (duration <= 0) return startBeat + Math.max(0, elapsed) * to / 60000;
+			if (duration <= 0)
+				return startBeat + Math.max(0, elapsed) * to / 60000;
 			var rampTime = Math.min(Math.max(0, elapsed), duration);
 			var rampBeats = (from * rampTime + (to - from) * rampTime * rampTime / (2 * duration)) / 60000;
 			return startBeat + rampBeats + Math.max(0, elapsed - duration) * to / 60000;
 		}
 
 		var index = activeChangeIndex(position);
-		if (index < 0) return Math.max(0, position) * 100 / 60000;
+		if (index < 0)
+			return Math.max(0, position) * 100 / 60000;
 		var point = timeChanges[index];
 		var startTime = number(read(point, "t", 0)) * timeUnitScale;
 		return segmentBeatAt(index, position, beatAtMapStart(index));
@@ -209,12 +227,14 @@ class Conductor {
 		var beat:Float = 0;
 		for (i in 0...index) {
 			var point = timeChanges[i];
-			if (Reflect.hasField(point, "b") && Reflect.field(point, "b") != null) beat = number(Reflect.field(point, "b"));
+			if (Reflect.hasField(point, "b") && Reflect.field(point, "b") != null)
+				beat = number(Reflect.field(point, "b"));
 			var nextTime = number(read(timeChanges[i + 1], "t", 0)) * timeUnitScale;
 			beat = segmentBeatAt(i, nextTime, beat);
 		}
 		var current = timeChanges[index];
-		if (Reflect.hasField(current, "b") && Reflect.field(current, "b") != null) beat = number(Reflect.field(current, "b"));
+		if (Reflect.hasField(current, "b") && Reflect.field(current, "b") != null)
+			beat = number(Reflect.field(current, "b"));
 		return beat;
 	}
 
@@ -239,23 +259,28 @@ class Conductor {
 	function changeDuration(index:Int):Float {
 		var point = timeChanges[index];
 		var raw = number(read(point, "duration", 0));
-		if (raw > 0) return raw * timeUnitScale;
-		if (index + 1 >= timeChanges.length) return 0;
+		if (raw > 0)
+			return raw * timeUnitScale;
+		if (index + 1 >= timeChanges.length)
+			return 0;
 		return Math.max(0, number(read(timeChanges[index + 1], "t", 0)) * timeUnitScale - number(read(point, "t", 0)) * timeUnitScale);
 	}
 
 	function activeChangeIndex(position:Float):Int {
 		var found = -1;
 		for (i in 0...timeChanges.length) {
-			if (number(read(timeChanges[i], "t", 0)) * timeUnitScale <= position) found = i;
-			else break;
+			if (number(read(timeChanges[i], "t", 0)) * timeUnitScale <= position)
+				found = i;
+			else
+				break;
 		}
 		return found;
 	}
 
 	function beatsPerMeasureAt(position:Float):Float {
 		var index = activeChangeIndex(position);
-		if (index < 0) return 4;
+		if (index < 0)
+			return 4;
 		var point = timeChanges[index];
 		var numerator = number(read(point, "n", 0));
 		if (numerator <= 0) {
@@ -271,14 +296,16 @@ class Conductor {
 	}
 
 	static function read(object:Dynamic, field:String, fallback:Dynamic):Dynamic {
-		if (object == null || !Reflect.hasField(object, field)) return fallback;
+		if (object == null || !Reflect.hasField(object, field))
+			return fallback;
 		var value = Reflect.field(object, field);
 		return value == null ? fallback : value;
 	}
 
 	static function readBool(object:Dynamic, field:String, fallback:Bool):Bool {
 		var value = read(object, field, fallback);
-		if (Std.isOfType(value, Bool)) return value;
+		if (Std.isOfType(value, Bool))
+			return value;
 		return Std.string(value).toLowerCase() == "true";
 	}
 

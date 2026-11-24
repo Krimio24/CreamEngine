@@ -10,6 +10,7 @@
 	<window width="1280" height="720" />
 	
 	<source path="Source" />
+
 	
 	<haxelib name="openfl" />
 	<haxelib name="lime" />
@@ -22,5 +23,11 @@
 	<assets path="assets/ui/fonts/FunkinOptions.otf" id="funkin-options" />
 
 	<assets path="assets" />
+
+	<includePath path="lib/quickjs/include/" />
+
+	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
+    <haxedef name="FLX_NO_DEBUG" unless="debug" />
+    <haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
 	
 </project>
